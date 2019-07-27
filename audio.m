@@ -10,11 +10,12 @@ ylabel('Amplitude');
 
 %after observing the cut-off frequency, use it to get rid of the background noise
 
-low_filter = lowpass((data_fft), 1.18*exp(5),fs); %filtering the frequencies above 1.18*exp(5) Hz)
+low_filter = lowpass(data, 1.18*exp(5),fs);       %filtering the frequencies above 1.18*exp(5) Hz)
 
 subplot(2,1,2); plot(abs(low_filter(:,1)));       %the second graph, filtered
 title('Lowpass filter with cutoff frequency of 118kHz ');
 xlabel('f[Hz]');
 ylabel('Amplitude');
 
-soundsc(low_filter, fs);                          %playing the filtered audio
+player = audioplayer(low_filter, fs);
+play(player);
