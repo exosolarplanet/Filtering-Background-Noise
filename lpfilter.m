@@ -1,11 +1,11 @@
 [data, fs] = audioread('audio_oboe.wav'); %read the audio
 data_fft = fft(data);                     %compute fourier transform, change time domain to frequency domain
 L = length(data);                         %length of signal
+T = 1/fs;                                 %Sampling period where fs is the sampling frequency
 t = (0:L-1)*T;                            %time vector
 f = fs*(0:(L/2))/L;                       %frequency vector
-T = 1/fs;                                 %Sampling period where fs is the sampling frequency
 
-figure; subplot(4,1,1); plot(t, data);    %plot signal with noise in time domain 
+figure; subplot(4,1,1); plot(t, data);    %plot signal with noise in time domain
 title('Noisy Signal with Time Domain');
 xlabel('t[s]');
 ylabel('|P1(t)|');
@@ -26,12 +26,12 @@ num = 1;                                   %numerator of the transfer function
 den = 2.621e-25*s^6 + 1.966e-20*s^5 + 6.144e-16*s^4 + 1.024e-11*s^3 + 9.6e-08*s^2 + 0.00048*s + 1; %denominator of the transfer function
 H = num/den;                               %transfer function
 
-[numd, dend] = bilinear(H.num{:},H.den{:}, fs); %transform the filter from analogue to digital, convert the s-domain transfer function to a discrete equivalent to work out coefficients 
+[numd, dend] = bilinear(H.num{:},H.den{:}, fs); %transform the filter from analogue to digital, convert the s-domain transfer function to a discrete equivalent to work out coefficients
 
-filtered = filter(numd,dend, data);        %filter the signal using the coefficients of the transfer function 
+filtered = filter(numd,dend, data);        %filter the signal using the coefficients of the transfer function
 F2 = abs(fft(filtered)/L);                 %two-sided spectrum for filtered signal, absolute values of the frequency values divided by the length of the signal
 F1 = F2(1:L/2+1);                          %single-sided spectrum for filtered signal
-F1(2:end-1) = 2*F1(2:end-1);               
+F1(2:end-1) = 2*F1(2:end-1);
 
 subplot(4,1,3); plot(t, filtered);
 title('Filtered Signal with Time Domain');
